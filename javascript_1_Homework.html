@@ -1,0 +1,57 @@
+<!doctype html>
+<body>
+  <input type="button" onClick="testTreeObject();" value="Нарисуй дерево" />
+</body>
+<script>
+function testTreeObject() {
+    let books = {
+        name: 'Сказки',         
+        items: [          
+            {
+                name: 'Сказки Пушкина',
+                items: [
+                    { name: 'Сказка о золотом петушке' },
+                    { name: 'Сказка о рыбаке и рыбке' },
+                    { name: 'Сказка о попе и его работнике Балде' }
+                ]
+            },
+            {
+                name: 'Сказки братьев Гримм',
+                items: [
+                    { name: 'Золушка' },
+                    { name: 'Золотой Гусь' },
+                    { name: 'Мальчик-с-пальчик' }
+                ]
+            }]
+    };
+
+    tree(books);
+}
+
+function tree(objBooks) {
+    if (objBooks && typeof objBooks == 'object' && Object.keys(objBooks).length > 0) {
+        let hierarchicalResult = '';
+        hierarchicalResult = addNodeInTree(objBooks)                
+        console.log(hierarchicalResult);
+        alert(hierarchicalResult);
+    }
+}
+
+function addNodeInTree(oneObj, delimiter = '|---', textDefault = 'Жанр') {
+    let textResult = '';
+    if (oneObj && typeof oneObj == 'object' && Object.keys(oneObj).length > 0) {
+        textResult = oneObj.hasOwnProperty('name') && oneObj['name'] ? String(oneObj['name']).trim().toLocaleUpperCase() : `${textDefault} не определен`;
+        
+        if (oneObj.hasOwnProperty('items') && oneObj['items'] && oneObj['items'].length > 0) {
+            oneObj['items'].forEach((item) => {
+                textResult += '\r\n';
+                textResult += delimiter;
+                textResult += addNodeInTree(item, `    |___`, 'Автор');
+            });
+        }
+    }
+    return textResult;
+}
+</script>
+
+</html>
