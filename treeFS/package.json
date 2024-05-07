@@ -1,0 +1,16 @@
+{
+  "name": "tree_2",
+  "version": "1.0.0",
+  "description": "Иерархическое представление каталогов и файлов заданной глубины",
+  "main": "treeFS.js",
+  "scripts": {
+    "test": "test",
+    "tree": "node ./treeFS.js tree"
+  },  
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
+  }
+}
