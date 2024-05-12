@@ -5,7 +5,8 @@
   "main": "treeFS.js",
   "scripts": {
     "test": "test",
-    "tree": "node ./treeFS.js tree"
+    "tree": "node ./treeFS.js tree",
+    "treeFS": "node ./treeFS_1.js"    
   },  
   "author": "",
   "license": "ISC",
