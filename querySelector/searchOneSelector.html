@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Поиск уникального селектора</title>
+    <style>
+        table, div {margin-bottom: 5px;}
+        table, td, th { border: 1px solid silver; border-radius: 5px; border-collapse: collapse;}
+
+        .container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-areas: "column-table column-ul";
+          grid-gap: 10px;
+          height: auto;
+        }
+        #table-div { grid-area: column-table; }        
+        .ul-div { grid-area: column-ul; }
+
+        .tr-color {
+            background-color: rgb(132, 238, 238);
+        }
+        .tr-color-1 {
+            background-color: rgb(247, 252, 252);
+        }
+
+        fieldset {
+            margin: 2px;
+            border: 1px solid silver;
+            padding-top: 1px;    
+            padding-left: 15px;    
+            padding-right: 15px;    
+            padding-bottom: 5px;
+            border-radius: 3px;
+            background: #e1eff2;
+        }
+        legend { padding: 2px; font-weight: 600; }
+
+
+
+    </style>
+</head>
+<script src="getPath.js"></script>
+<body>
+    <div class="container">
+
+      <div id="table-div">
+        <table id="example-table">
+            <thead>
+              <tr>
+                <th>Заголовок 1</th>
+                <th>Заголовок 2</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tr-color">
+                <td>Ячейка 1,1</td>
+                <td>Ячейка 1,2</td>
+              </tr>
+              <tr class="tr-color-2">
+                <td>Ячейка 2,1</td>
+                <td>Ячейка 2,2</td>
+              </tr>
+              <tr class="tr-color">
+                <td>Ячейка 3,1</td>
+                <td>Ячейка 3,2</td>
+              </tr>
+              <tr class="tr-color-2">
+                <td>Ячейка 4,1</td>
+                <td>Ячейка 4,2</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+
+      <fieldset class="ul-div">
+        <legend>Для определения селектора любого элемента из списка нажмите на этот элемент списка</legend>
+        <ul class="company">
+          <li id="li_1">Microsoft</li>
+          <li id="li_2">Google</li>
+          <li id="li_3">Apple</li>
+          <li id="li_4">IBM</li>
+        </ul>        
+      </fieldset>
+
+    </div>      
+
+    <div><button onClick="searchPathTD(3,1);" value="">Найти путь к 1 ячейке 3 строки</button></div>
+    <div><button onClick="searchPathTD(4,2);" value="">Найти путь к 2 ячейке 4 строки</button></div>
+    <div><input type="text" id="result-selector" style="width:60%; height:30px;"></input></div>
+    <div></div>
+    <div><button onClick="testSelectorAll();">Тест результата</button></div>    
+    <div><textarea id="result-tests" style="width:60%; height:100px;" readonly></textarea></div>
+
+    <script>
+        document.querySelector('li#li_1').addEventListener('click', (e) => { clickLiForGetPath(e.target.id) });
+        document.querySelector('li#li_2').addEventListener('click', (e) => { clickLiForGetPath(e.target.id) });
+        document.querySelector('li#li_3').addEventListener('click', (e) => { clickLiForGetPath(e.target.id) });
+        document.querySelector('li#li_4').addEventListener('click', (e) => { clickLiForGetPath(e.target.id) });
+
+        function clickLiForGetPath(li_id){
+          document.querySelector('#result-tests').innerHTML = '';
+          if (li_id) {
+            let currentLi = document.querySelector(`#${li_id}`);
+            if (currentLi) {
+              resultPath(currentLi);
+            }
+          }
+        }
+
+        function searchPathTD(rowNumber, cellNumber){
+            if (rowNumber && cellNumber) {
+                let elem = document.querySelector(`#example-table tbody tr:nth-child(${rowNumber}) td:nth-child(${cellNumber})`);
+                console.log(elem);
+                if (elem) {
+                  resultPath(elem);
+                }
+            }
+        }
+
+        function resultPath(elem){
+          if (elem) {
+            let selector = getPath(elem);
+              console.log(selector);
+              let inputText = document.querySelector('#result-selector');
+              inputText.value = selector;
+          }
+        }
+
+        function testSelectorAll(){
+          let resTests = document.querySelector('#result-tests');
+          if (resTests) {
+            resTests.innerHTML = '';
+            resultSearch = document.querySelector('#result-selector');
+            if (!resultSearch.value) {
+              alert('Нечего тестировать');
+              return;
+            }
+            else {
+                let allResult = document.querySelectorAll(resultSearch.value);
+                console.log(allResult);
+                resTests.innerHTML = `Число найденных объектов = ${allResult ? allResult.length : 0}.\r\nПодробнее см. в консоли`;
+                
+            }
+          }
+        }
+    </script>
+</body>
+</html>
