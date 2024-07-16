@@ -1,0 +1,27 @@
+{
+  "name": "leetcode",
+  "version": "1.0.0",
+  "description": "Проект на примере leetCode",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "jest --forceExit --detectOpenHandles app.test.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [
+    "rest",
+    "express.js"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^2.1.0",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "body-parser": "^1.20.2",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.4",
+    "supertest": "^7.0.0"
+  }
+}
