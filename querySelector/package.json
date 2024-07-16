@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "passport-google-oauth": "^2.0.0",
+    "passport-local-mongoose": "^8.0.0"
+  }
+}
