@@ -19,6 +19,8 @@ import {
 } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react";
 import  FocusLock from "react-focus-lock";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../../features/users/usersSlice";
 
 /**пропсы для формы */
 interface FormProps {
@@ -31,17 +33,22 @@ interface FormProps {
 /**основные пропсы - для элемента */
 interface NameProps {
     firstName?: string,
-    lastName?: string
+    lastName?: string,
+    idU?: number
 }
 
 const FirstLastnameInput = (props: NameProps) => {
+    let idValueUser: number | undefined = props.idU;
     const { onOpen, onClose, isOpen } = useDisclosure();
     const firstFieldRef = React.useRef<HTMLInputElement>(null);
     const [fname, setFname]  = useState<string>(`${props.firstName ?? 'фамилия'}`);
     const [lname, setLname]  = useState<string>(`${props.lastName ?? 'имя'}`);
     const [allName, setAllName] = useState<string>(`${fname} ${lname}`);
+    const dispatch = useDispatch();
 
-    useEffect (() => {setAllName(`${fname} ${lname}`)}, [fname, lname]);
+    useEffect (() => {
+            setAllName(`${fname} ${lname}`);            
+        }, [fname, lname]);
 
     /**Внутренний блок - всплывающее окно для редактирования фамиоии и имени */
     const Form = (props:  React.PropsWithChildren<FormProps> ) => {
@@ -87,6 +94,9 @@ const FirstLastnameInput = (props: NameProps) => {
                 else {
                     setFname(nameFirst);
                     setLname(nameLast);
+                    if (idValueUser) {
+                        dispatch(updateUser({id: idValueUser, changes: {firstname: nameFirst, lastname: nameLast}}))
+                    }
                     props.onCancel(e);
                 }
             }

@@ -1,14 +1,20 @@
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import { Button, ChakraProvider, FormControl, FormLabel, HStack, IconButton, Input, Tag, VStack, Text } from "@chakra-ui/react";
 import { useRef, useState } from "react";
+import { useAppDispatch } from "../../../app/hook";
+import { updateTask } from "../../../features/tasks/tasksSlice";
 
 interface Props {
     text: string,
-    hideAdd?: boolean
+    hideAdd?: boolean,
+    maxW?: string,
+    idTask?: number | undefined
 }
 
-const TagsStack = (props: Props) => {
+const TagsStack = (props: Props) => { 
+    let idTaskValue: number | undefined = props.idTask;
     let arrayTags: string[]  = props.text.split(';');
+    const dispatch = useAppDispatch();
 
     const [hideAdd, setHideAdd] = useState<boolean>(true);
     const [hideError, setHideError] = useState<boolean>(true);
@@ -22,14 +28,17 @@ const TagsStack = (props: Props) => {
 
     /** Добавление тега */
     const AddTagHandler = (newText: string) => {
-        arrayTags = [...updateArrayTags, newText];
+        arrayTags = [...updateArrayTags, newText];        
         setUpdateArrayTags(arrayTags);
 
+        if (idTaskValue)
+        {         
+            dispatch(updateTask({ id: idTaskValue , changes: { tags: arrayTags.join(';')} }));
+        }
     }
 
     /** Проверка на совпадение с уже имеющимися тегами */
     const PrepareValidationTagHandler = () => {
-        console.log('++');
         const elNewTag = ref.current;
         const text: string = elNewTag !== null ? (elNewTag as HTMLInputElement).value : "";
         if (text.trim() !== "") {
@@ -54,7 +63,7 @@ const TagsStack = (props: Props) => {
 
     return(
         <ChakraProvider>
-            <VStack spacing={1} maxW={"60vw"} shouldWrapChildren={true}>
+            <VStack spacing={1} maxW={props.maxW ?? "60vw"} shouldWrapChildren={true}>
                 <HStack spacing={4} alignItems="center" justifyContent="space-between" maxW={"58vw"}>
                     {
                         updateArrayTags.filter(x => x.trim() !== '').map((oneText, i) => ( 

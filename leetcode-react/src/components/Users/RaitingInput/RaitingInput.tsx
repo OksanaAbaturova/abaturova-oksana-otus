@@ -5,18 +5,15 @@ import { SizeVariant } from '../../../extentions/sizeVariant';
 
 interface Props {
     value?: number,
-   /* isRequired?: boolean,    //обязательность
-    isReadOnly?: boolean,
-    variant?: "outline" | "flushed" | "filled" | "unstyled"  //тип обрамления поля*/
+    idUser?:number
 }
 
-const RaitingInput = (props: Props) => {   
-
+const RaitingInput = (props: Props) => {
     return (
         <ChakraProvider>
             <InputGroup w={"500px"} size='md' colorScheme={'teal'}>
                 <InputLeftAddon>Рейтинг:</InputLeftAddon>
-                <NumberSelectInput defaultValue={props.value ?? 0} sizeInput={SizeVariant.md}/>               
+                <NumberSelectInput defaultValue={props.value ?? 0} sizeInput={SizeVariant.md} idU={props.idUser}/>
             </InputGroup>
         </ChakraProvider>
     );

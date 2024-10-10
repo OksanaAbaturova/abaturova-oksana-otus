@@ -1,12 +1,15 @@
 import { Box, Button, ChakraProvider, HStack, IconButton, VStack } from "@chakra-ui/react";
 import { InputOutputParams } from "../../../models/Task/InputOutputParams";
 import InputOutputDatasStack from "../InputOutputDatasStack/InputOtputDatasStack";
-import { PropsWithChildren, useState, useCallback } from "react";
+import { PropsWithChildren, useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
+import { useDispatch } from "react-redux";
+import { updateTask } from "../../../features/tasks/tasksSlice";
 
 interface Props {
     innerBlocks?: InputOutputParams[],
-    isReadOnly?: boolean
+    isReadOnly?: boolean,
+    idTask?: number
 }
 
 const defaultBlockIO: InputOutputParams = {
@@ -15,30 +18,36 @@ const defaultBlockIO: InputOutputParams = {
 };
 
 const InputOutputBlock = (props: PropsWithChildren<Props>) => {
-    const firstValueParams = props.innerBlocks ?? [defaultBlockIO];
+    let idValueTask: number | undefined = props.idTask;
+    let firstValueParams: InputOutputParams[] = props.innerBlocks ?? [defaultBlockIO];
     const [valueProps, setValueProps] = useState<InputOutputParams[]>(firstValueParams);
-    const [lengthBlocks, setLengthBlocks] = useState<number>(firstValueParams.length);
-
-    useCallback(() => {innerBlock(valueProps)}, [lengthBlocks]); 
+    const dispatch = useDispatch();
 
     const setCurrentProps = () :  void => {
-        setValueProps(firstValueParams);        
-        setLengthBlocks(valueProps.length);
+        setValueProps(firstValueParams);
     };
 
-
     const AddBlockHandler = () => {
-        firstValueParams.push(defaultBlockIO);      
+        firstValueParams = [...firstValueParams, defaultBlockIO];
+        if (idValueTask) {
+            dispatch(updateTask({id: idValueTask, changes: {ioParams: firstValueParams}}));
+        }
         setCurrentProps();
     }
 
     const DeleteBlockHandler = () => {
-        firstValueParams.pop();      
+        firstValueParams = firstValueParams.filter((e, ind) => ind !== (firstValueParams.length - 1));
+        if (idValueTask) {
+            dispatch(updateTask({id: idValueTask, changes: {ioParams: firstValueParams}}));
+        } 
         setCurrentProps();
     }
 
     const DeleteCurrentBlockHandler = (i: number) => {
-        firstValueParams.splice(i, 1);      
+        firstValueParams = firstValueParams.filter((e, ind) => ind !== i);
+        if (idValueTask) {
+            dispatch(updateTask({id: idValueTask, changes: {ioParams: firstValueParams}}));
+        } 
         setCurrentProps();
     }
 
@@ -117,27 +126,8 @@ const InputOutputBlock = (props: PropsWithChildren<Props>) => {
         }
     }
 
-const BlockEdit = () => {
-    return <ChakraProvider>
-    <VStack >
-        {innerBlock(valueProps)}
-        <HStack spacing={5}>
-            <Button colorScheme={"teal"} onClick={AddBlockHandler}>Добавить блок параметров</Button>
-            <Button colorScheme={"teal"} onClick={DeleteBlockHandler}>Удалить последний блок</Button>
-        </HStack>
-    </VStack>
-</ChakraProvider>;
-};
-
-const BlockReadOnly = () => {
-    return <ChakraProvider>
-        <VStack >
-            {innerBlockReadonly(valueProps)}
-        </VStack>
-    </ChakraProvider>;
-};
-
-    return (props.isReadOnly ?? false) ? BlockReadOnly() : BlockEdit();/* <ChakraProvider>
+    const BlockEdit = () => {
+        return <ChakraProvider>
         <VStack >
             {innerBlock(valueProps)}
             <HStack spacing={5}>
@@ -145,7 +135,18 @@ const BlockReadOnly = () => {
                 <Button colorScheme={"teal"} onClick={DeleteBlockHandler}>Удалить последний блок</Button>
             </HStack>
         </VStack>
-    </ChakraProvider>;*/
+    </ChakraProvider>;
+    };
+
+    const BlockReadOnly = () => {
+        return <ChakraProvider>
+            <VStack >
+                {innerBlockReadonly(valueProps)}
+            </VStack>
+        </ChakraProvider>;
+    };
+
+    return (props.isReadOnly ?? false) ? BlockReadOnly() : BlockEdit();
 }
 
 export default InputOutputBlock;

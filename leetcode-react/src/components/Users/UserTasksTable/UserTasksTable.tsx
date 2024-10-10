@@ -7,9 +7,8 @@ interface Props {
 }
 
 const UserTasksTable = (props: Props) => {
-
     const tasks: TasksUsers[] | undefined = props.tasksUsers;
-    const isOk = tasks !== undefined;
+    const isOk = tasks && tasks.length > 0;
 
     const getAvg = (arr?: number[]) => {
         let avg: number = 0;
