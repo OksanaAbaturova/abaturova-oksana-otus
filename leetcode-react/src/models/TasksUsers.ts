@@ -1,4 +1,6 @@
 export type TasksUsers = {
+    /** ИД */
+    id: number,
     idUser: number,
     idTask: number,
     /**завершено */

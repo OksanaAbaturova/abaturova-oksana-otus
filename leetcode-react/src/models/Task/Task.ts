@@ -1,4 +1,5 @@
 import { ComplexityLevelTask } from "./ComplexityLevelTask";
+import { InputOutputParams } from "./InputOutputParams";
 
 export interface Task {
     /** ИД задачи */
@@ -8,9 +9,11 @@ export interface Task {
     /** описание */
     description: string;
     /** сопоставимые теги для поиска */
-    tags?: string[];
+    tags?: string;
     /** уровень сложности */
     complexityLevel: ComplexityLevelTask;
+    /**Входный и выходные параметры */
+    ioParams?: InputOutputParams[];
     /** вложения */
     attachments?: any[];
 }

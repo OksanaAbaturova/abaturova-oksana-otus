@@ -7,18 +7,20 @@ interface Props {
     actualLevel?: ComplexityLevelTask,
     levelReadOnly?: boolean,     /**допустимость выбора уровня сложности */
     actualTags?: string
-    hideBlockAddTags?: boolean  /** скрыть блок добавления тегов */
+    hideBlockAddTags?: boolean,  /** скрыть блок добавления тегов */
+    taskId?: number | undefined
 }
 
 /**Уровеньт сложности + массив тегов */
 const LevelAndTagsTask = (props: Props) =>  {
+    //const [level, setLevel] = useState<ComplexityLevelTask | undefined>(props.actualLevel);
     return (
         <ChakraProvider>
-            <HStack p={2} justifyContent="space-between"/* align={"stretch"} h={40}*/>
+            <HStack p={2} justifyContent="space-between">
                 <Box w={220} >
-                    <ComplexityLevelSelect currentLevel={props.actualLevel} isReadonly={props.levelReadOnly ?? false}/> 
+                    <ComplexityLevelSelect currentLevel={props.actualLevel} isReadonly={props.levelReadOnly ?? false} idTask={props.taskId}/> 
                 </Box>
-                <TagsStack text={props.actualTags ?? ""}  hideAdd={props.hideBlockAddTags ?? false}/>
+                <TagsStack text={props.actualTags ?? ""}  hideAdd={props.hideBlockAddTags ?? false} idTask={props.taskId}/>
             </HStack>
         </ChakraProvider>
     );
